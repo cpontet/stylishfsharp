@@ -10,7 +10,17 @@ namespace StylishFSharp
 
 open System
 
-type MilesYards = MilesYards of wholeMiles : int * yeards : int
+type MilesYards = MilesYards of wholeMiles : int * yeards : int with
+    static member Zero = MilesYards(0, 0)
+    static member (+) (a : MilesYards, b : MilesYards) =
+        match a, b with
+        | MilesYards(am, ay), MilesYards(bm, by) ->
+            let totalMiles = am + bm
+            let totalYards = ay + by
+            let extraMiles = totalYards / 1760 |> int
+            let remainingYards = totalYards - (extraMiles * 1760)
+
+            MilesYards(totalMiles + extraMiles, remainingYards)
 
 module MilesYards =
 
