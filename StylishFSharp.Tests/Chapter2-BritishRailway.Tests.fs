@@ -37,11 +37,11 @@ let ``1 mile 880 yards is 1 and a half miles`` () =
     Assert.Equal(1.5, decimalMiles)
 
 [<Fact>]
-let ``Monoid identity`` () =
+let ``MilesYards monoid zero`` () =
     Assert.True(MilesYards.Zero + MilesYards.Zero = MilesYards.Zero)
 
 [<Fact>]
-let ``Monoid identity 2`` () =
+let ``MilesYards monoid identity`` () =
     Assert.True(MilesYards.Zero + MilesYards.fromMilesPointYards(1.0880) = MilesYards.fromMilesPointYards(1.0880))
 
 [<Fact>]
@@ -60,3 +60,29 @@ let ``Monoid associativity`` () =
         (MilesYards.fromMilesPointYards(1.0001) + (MilesYards.fromMilesPointYards(1.0002) + MilesYards.fromMilesPointYards(1.0003)))
     )
 
+[<Fact>]
+let ``80 chaines equal 1 mile`` () =
+    Assert.True(MilesChains.fromMilesChains(0, 30) + MilesChains.fromMilesChains(0, 50) = MilesChains.fromMilesChains(1, 0))
+
+[<Fact>]
+let ``120 chaines equal 1 and a half mile`` () =
+    let milesChains = MilesChains.fromMilesChains(0, 70) + MilesChains.fromMilesChains(0, 50)
+    let decimalMiles = MilesChains.toDecimalMiles(milesChains)
+    decimalMiles |> should equal 1.5
+
+[<Fact>]
+let ``MilesChains monoid identity`` () =
+    Assert.True(MilesChains.fromMilesChains(1, 1) + MilesChains.Zero = MilesChains.fromMilesChains(1, 1))
+
+[<Fact>]
+let ``Negative wholeMiles value is not valid for MilesChains`` () =
+    (fun() -> MilesChains.fromMilesChains(-1, 0) |> ignore) |> should throw typeof<ArgumentOutOfRangeException>
+
+[<Fact>]
+let ``Negative chains value is not valid for MilesChains`` () =
+    (fun() -> MilesChains.fromMilesChains(0, -1) |> ignore) |> should throw typeof<ArgumentOutOfRangeException>
+
+[<Fact>]
+let ``80 chains value is not valid for MilesChains`` () =
+    (fun() -> MilesChains.fromMilesChains(0, 80) |> ignore) |> should throw typeof<ArgumentOutOfRangeException>
+    

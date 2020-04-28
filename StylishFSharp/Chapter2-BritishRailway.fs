@@ -1,10 +1,6 @@
-﻿// 1 mile = 1760 yards
+﻿// 1 mile = 1760 yards = 80 chains
 // 1 chain = 22 yards
 // 1 yard = 0.9144 meter
-
-// DONE: 1. Handle negative values 
-// TODO: 2. Chains
-// TODO: 3. Monoid
 
 namespace StylishFSharp
 
@@ -40,3 +36,28 @@ module MilesYards =
         match milesYards with
         | MilesYards(wholeMiles, yards) ->
             (float wholeMiles) + ((float yards) / 1760.)
+
+
+type MilesChains = MilesChains of wholeMiles : int * chains : int with
+    static member Zero = MilesChains(0, 0)
+    static member (+) (a : MilesChains, b : MilesChains) =
+        match a, b with
+        | MilesChains(am, ac), MilesChains(bm, bc) ->
+            let totalMiles = am + bm
+            let totalChains = ac + bc
+            let extraMiles = totalChains / 80 |> int
+            let remainingChains = totalChains - (extraMiles * 80)
+
+            MilesChains(totalMiles + extraMiles, remainingChains)
+
+module MilesChains =
+
+    let fromMilesChains ( wholeMiles : int, chains : int ) : MilesChains =
+        if wholeMiles < 0 then
+            raise <| ArgumentOutOfRangeException("wholeMiles", "Must be >= 0")
+        if chains < 0 || chains >= 80 then
+            raise <| ArgumentOutOfRangeException("chains", "Must be >= 0 and < 80")
+        MilesChains(wholeMiles, chains)
+            
+    let toDecimalMiles (MilesChains(wholeMiles, chains)) : float =
+        (float wholeMiles) + ((float chains) / 80.)
