@@ -5,11 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Chapter3-Options.fs" />
     <None Include="Chapter2-BritishRailway.md" />
     <Compile Include="Chapter2-BritishRailway.fs" />
   </ItemGroup>
-
-  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.7.1" />
