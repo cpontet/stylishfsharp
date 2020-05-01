@@ -2,7 +2,7 @@
 // 1 chain = 22 yards
 // 1 yard = 0.9144 meter
 
-namespace StylishFSharp
+namespace StylishFSharp.Chapter2
 
 open System
 
